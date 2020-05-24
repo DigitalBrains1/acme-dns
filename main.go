@@ -71,10 +71,10 @@ func main() {
 			udpProto += "6"
 			tcpProto += "6"
 		}
-		dnsServerUDP := NewDNSServer(DB, Config.General.Listen, udpProto, Config.General.Domain)
+		dnsServerUDP := NewDNSServer(DB, Config.General.Listen, udpProto, Config.General.Nsname)
 		dnsservers = append(dnsservers, dnsServerUDP)
 		dnsServerUDP.ParseRecords(Config)
-		dnsServerTCP := NewDNSServer(DB, Config.General.Listen, tcpProto, Config.General.Domain)
+		dnsServerTCP := NewDNSServer(DB, Config.General.Listen, tcpProto, Config.General.Nsname)
 		dnsservers = append(dnsservers, dnsServerTCP)
 		// No need to parse records from config again
 		dnsServerTCP.Domains = dnsServerUDP.Domains
@@ -82,7 +82,7 @@ func main() {
 		go dnsServerUDP.Start(errChan)
 		go dnsServerTCP.Start(errChan)
 	} else {
-		dnsServer := NewDNSServer(DB, Config.General.Listen, Config.General.Proto, Config.General.Domain)
+		dnsServer := NewDNSServer(DB, Config.General.Listen, Config.General.Proto, Config.General.Nsname)
 		dnsservers = append(dnsservers, dnsServer)
 		dnsServer.ParseRecords(Config)
 		go dnsServer.Start(errChan)
